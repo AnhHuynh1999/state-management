@@ -5,7 +5,7 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import counterReducer from "../redux/counter/counterSlice";
-import userReducer from "../redux/user/userSlice";
+import userReducer, { userSlice } from "../redux/user/userSlice";
 import appReducer from "./app/appSlice";
 import {
   persistStore,
@@ -18,6 +18,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import blogReducer from "./blog/blogSlice";
 
 const persistConfig = {
   key: "root",
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   count: counterReducer,
   user: userReducer,
   app: appReducer,
+  blog: blogReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
