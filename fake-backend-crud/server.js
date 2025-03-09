@@ -2,8 +2,8 @@ const jsonServer = require("json-server");
 const server = jsonServer.create();
 const router = jsonServer.router("db.json");
 const middlewares = jsonServer.defaults();
-const SERVER_PORT = 8000;
-const DELAY_TIMEOUT = 0; //unit: milliseconds
+const SERVER_PORT = 8080;
+const DELAY_TIMEOUT = 3000; //unit: milliseconds
 
 server.use(middlewares);
 
