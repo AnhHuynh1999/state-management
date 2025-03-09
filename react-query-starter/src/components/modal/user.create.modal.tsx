@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
+import { QUERY_KEY } from "../../config/key";
 
 interface IUser {
   email: string;
@@ -35,11 +36,11 @@ const UserCreateModal = (props: any) => {
       return res.json();
     },
     onSuccess: () => {
-      setIsOpenCreateModal(false);
       setEmail("");
       setName("");
       toast.success("Created");
-      queryClient.invalidateQueries({ queryKey: ["fetchUser"] });
+      setIsOpenCreateModal(false);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY.getAllUsers() });
     },
   });
 

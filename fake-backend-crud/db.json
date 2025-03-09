@@ -27,19 +27,9 @@
   ],
   "users": [
     {
-      "id": 2,
-      "name": "Hỏi Dân IT",
-      "email": "hoidanit@gmail.com"
-    },
-    {
-      "id": 3,
-      "name": "Hỏi Dân IT",
-      "email": "admin@gmail.com"
-    },
-    {
-      "email": "test",
-      "name": "test",
-      "id": 4
+      "email": "baoanh",
+      "name": "baoanh update",
+      "id": 2
     },
     {
       "email": "test",
