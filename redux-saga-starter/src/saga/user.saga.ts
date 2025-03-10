@@ -3,9 +3,15 @@ import {
   createUserFailed,
   createUserPending,
   createUserSuccess,
+  deleteUserFailed,
+  deleteUserPending,
+  deleteUserSuccess,
   fetchUserFailed,
   fetchUserPending,
   fetchUserSuccess,
+  updateUserFailed,
+  updateUserPending,
+  updateUserSuccess,
 } from "../redux/user/user.slide";
 import { IUser } from "../type/backend";
 import { PayloadAction } from "@reduxjs/toolkit";
@@ -28,10 +34,43 @@ const createUser = async (email: string, name: string) => {
   });
   return res.json();
 };
+
+const updateUser = async (id: number, email: string, name: string) => {
+  const res = await fetch(`http://localhost:8000/users/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      email,
+      name,
+    }),
+    headers: {
+      "Content-Type": " application/json",
+    },
+  });
+  return res.json();
+};
+
+const deleteUser = async (id: number) => {
+  const res = await fetch(`http://localhost:8000/users/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": " application/json",
+    },
+  });
+  return res.json();
+};
+
+function* handleFetchUser() {
+  try {
+    const users: IUser[] = yield call(fetchUser);
+    yield put(fetchUserSuccess(users));
+  } catch (error) {
+    yield put(fetchUserFailed());
+  }
+}
+
 function* handleCreateUser(
   action: PayloadAction<{ email: string; name: string }>
 ) {
-  console.log("Fetching user...");
   try {
     const res: IUser = yield call(
       createUser,
@@ -45,18 +84,38 @@ function* handleCreateUser(
   }
 }
 
-function* handleFetchUser() {
+function* handleUpdateUser(
+  action: PayloadAction<{ id: number; email: string; name: string }>
+) {
   try {
-    const users: IUser[] = yield call(fetchUser);
-    yield put(fetchUserSuccess(users));
+    yield call(
+      updateUser,
+      action.payload.id,
+      action.payload.email,
+      action.payload.name
+    );
+    yield put(updateUserSuccess());
+    yield put(fetchUserPending());
   } catch (error) {
-    yield put(fetchUserFailed());
+    yield put(updateUserFailed());
+  }
+}
+
+function* handleDeleteUser(action: PayloadAction<{ id: number }>) {
+  try {
+    yield call(deleteUser, action.payload.id);
+    yield put(deleteUserSuccess());
+    yield put(fetchUserPending());
+  } catch (error) {
+    yield put(deleteUserFailed());
   }
 }
 function* userSaga() {
   console.log(">> Running userSaga");
   yield takeEvery(fetchUserPending, handleFetchUser);
   yield takeEvery(createUserPending, handleCreateUser);
+  yield takeEvery(updateUserPending, handleUpdateUser);
+  yield takeEvery(deleteUserPending, handleDeleteUser);
 }
 
 export default userSaga;

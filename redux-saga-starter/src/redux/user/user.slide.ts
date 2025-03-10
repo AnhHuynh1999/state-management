@@ -9,6 +9,12 @@ export interface CounterState {
 
   isCreating: boolean;
   isCreateSuccess: boolean;
+
+  isUpdating: boolean;
+  isUpdateSuccess: boolean;
+
+  isDeleting: boolean;
+  isDeleteSuccess: boolean;
 }
 
 const initialState: CounterState = {
@@ -16,6 +22,13 @@ const initialState: CounterState = {
   isError: false,
   isCreating: false,
   isCreateSuccess: false,
+
+  isUpdating: false,
+  isUpdateSuccess: false,
+
+  isDeleting: false,
+  isDeleteSuccess: false,
+
   data: [],
   errors: [],
 };
@@ -29,6 +42,20 @@ export const createUserPending = createAction<{ email: string; name: string }>(
 );
 export const createUserSuccess = createAction("createUserSuccess");
 export const createUserFailed = createAction("createUserFailed");
+
+export const deleteUserPending = createAction<{ id: number }>(
+  "deleteUserPending"
+);
+export const deleteUserSuccess = createAction("deleteUserSuccess");
+export const deleteUserFailed = createAction("deleteUserFailed");
+
+export const updateUserPending = createAction<{
+  id: number;
+  email: string;
+  name: string;
+}>("updateUserPending");
+export const updateUserSuccess = createAction("updateUserSuccess");
+export const updateUserFailed = createAction("updateUserFailed");
 
 // Define the slice
 export const userSlice = createSlice({
@@ -68,6 +95,38 @@ export const userSlice = createSlice({
       .addCase(createUserFailed, (state, action) => {
         state.isCreating = false;
         state.isCreateSuccess = false;
+        state.isError = true;
+        state.errors = action.payload;
+      })
+      .addCase(updateUserPending, (state, action) => {
+        state.isUpdating = true;
+        state.isError = false;
+        state.isUpdateSuccess = false;
+      })
+      .addCase(updateUserSuccess, (state, action) => {
+        state.isUpdating = false;
+        state.isUpdateSuccess = true;
+        state.isError = false;
+      })
+      .addCase(updateUserFailed, (state, action) => {
+        state.isUpdating = false;
+        state.isUpdateSuccess = false;
+        state.isError = true;
+        state.errors = action.payload;
+      })
+      .addCase(deleteUserPending, (state, action) => {
+        state.isDeleting = true;
+        state.isError = false;
+        state.isDeleteSuccess = false;
+      })
+      .addCase(deleteUserSuccess, (state, action) => {
+        state.isDeleting = false;
+        state.isDeleteSuccess = true;
+        state.isError = false;
+      })
+      .addCase(deleteUserFailed, (state, action) => {
+        state.isDeleting = false;
+        state.isDeleteSuccess = false;
         state.isError = true;
         state.errors = action.payload;
       });
