@@ -6,11 +6,16 @@ export interface CounterState {
   isError: boolean;
   data: IUser[];
   errors: any;
+
+  isCreating: boolean;
+  isCreateSuccess: boolean;
 }
 
 const initialState: CounterState = {
   isPending: false,
   isError: false,
+  isCreating: false,
+  isCreateSuccess: false,
   data: [],
   errors: [],
 };
@@ -18,6 +23,12 @@ const initialState: CounterState = {
 export const fetchUserPending = createAction("fetchUserPending");
 export const fetchUserSuccess = createAction<IUser[]>("fetchUserSuccess");
 export const fetchUserFailed = createAction("fetchUserFailed");
+
+export const createUserPending = createAction<{ email: string; name: string }>(
+  "createUserPending"
+);
+export const createUserSuccess = createAction("createUserSuccess");
+export const createUserFailed = createAction("createUserFailed");
 
 // Define the slice
 export const userSlice = createSlice({
@@ -41,6 +52,22 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserFailed, (state, action) => {
         state.isPending = false;
+        state.isError = true;
+        state.errors = action.payload;
+      })
+      .addCase(createUserPending, (state, action) => {
+        state.isCreating = true;
+        state.isError = false;
+        state.isCreateSuccess = false;
+      })
+      .addCase(createUserSuccess, (state, action) => {
+        state.isCreating = false;
+        state.isCreateSuccess = true;
+        state.isError = false;
+      })
+      .addCase(createUserFailed, (state, action) => {
+        state.isCreating = false;
+        state.isCreateSuccess = false;
         state.isError = true;
         state.errors = action.payload;
       });
