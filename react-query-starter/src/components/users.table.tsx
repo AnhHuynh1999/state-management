@@ -10,6 +10,7 @@ import Popover from "react-bootstrap/Popover";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { calulatePagesCount } from "../helper";
 import { QUERY_KEY } from "../config/key";
+import { useFetchUser } from "../config/fetch";
 
 interface IUser {
   id: number;
@@ -23,30 +24,36 @@ function UsersTable() {
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState<boolean>(false);
   const [dataUser, setDataUser] = useState({});
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
 
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
   const PAGE_SIZE = 3;
+
+  // const {
+  //   isPending,
+  //   error,
+  //   data: users,
+  // } = useQuery({
+  //   // queryKey: ["fetchUser", currentPage],
+  //   queryKey: QUERY_KEY.getUserPaginate(currentPage),
+  //   queryFn: (): Promise<IUser[]> =>
+  //     fetch(
+  //       `http://localhost:8000/users?_page=${currentPage}&_limit=${PAGE_SIZE}`
+  //     ).then((res) => {
+  //       const total_items = +(res.headers?.get("X-Total-Count") ?? 0);
+  //       const page_size = PAGE_SIZE;
+  //       setTotalPages(calulatePagesCount(page_size, total_items));
+  //       return res.json();
+  //     }),
+  //   placeholderData: keepPreviousData,
+  //   // staleTime: 30 * 1000,
+  // });
 
   const {
     isPending,
     error,
     data: users,
-  } = useQuery({
-    // queryKey: ["fetchUser", currentPage],
-    queryKey: QUERY_KEY.getUserPaginate(currentPage),
-    queryFn: (): Promise<IUser[]> =>
-      fetch(
-        `http://localhost:8000/users?_page=${currentPage}&_limit=${PAGE_SIZE}`
-      ).then((res) => {
-        const total_items = +(res.headers?.get("X-Total-Count") ?? 0);
-        const page_size = PAGE_SIZE;
-        setTotalPages(calulatePagesCount(page_size, total_items));
-        return res.json();
-      }),
-    placeholderData: keepPreviousData,
-    // staleTime: 30 * 1000,
-  });
+    totalPages,
+  } = useFetchUser(currentPage);
 
   if (isPending) return "Loading...";
 
@@ -116,7 +123,7 @@ function UsersTable() {
           </tr>
         </thead>
         <tbody>
-          {users?.map((user) => {
+          {users?.map((user: any) => {
             return (
               <tr key={user.id}>
                 <OverlayTrigger
