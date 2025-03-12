@@ -10,3 +10,8 @@ export interface IBlog {
   author: string;
   content: string;
 }
+
+export interface ILogin {
+  email: string;
+  password: string;
+}

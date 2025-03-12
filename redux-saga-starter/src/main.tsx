@@ -1,18 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Provider } from "react-redux"
-import { store } from './redux/store.ts';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import HomePage from './screens/home.page.tsx';
-import UserPage from './screens/user.page.tsx';
-import LoginPage from './screens/login.page.tsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.ts";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./screens/home.page.tsx";
+import UserPage from "./screens/user.page.tsx";
+import LoginPage from "./screens/login.page.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,16 +23,15 @@ const router = createBrowserRouter([
         path: "user",
         element: <UserPage />,
       },
-    ]
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+    ],
   },
 ]);
 
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
@@ -52,5 +48,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       pauseOnHover
       theme="light"
     />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

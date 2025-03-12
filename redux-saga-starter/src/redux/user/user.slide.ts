@@ -33,6 +33,11 @@ const initialState: UserState = {
   errors: [],
 };
 
+export const loginPending = createAction<{ email: string; password: string }>(
+  "loginPending"
+);
+export const logout = createAction("logout");
+
 export const fetchUserPending = createAction("fetchUserPending");
 export const fetchUserSuccess = createAction<IUser[]>("fetchUserSuccess");
 export const fetchUserFailed = createAction("fetchUserFailed");
